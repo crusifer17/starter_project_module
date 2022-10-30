@@ -36,38 +36,6 @@ app.post("/api/users", async (req, res) => {
   }
 });
 
-app.post("/api/products", async (req, res) => {
-  try {
-    await db
-      .collection("products")
-      .doc("/" + req.body.id + "/")
-      .create({
-        name: req.body.name,
-      });
-
-    return res.status(200).json();
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      error: "Create Failed",
-    });
-  }
-});
-
-app.get("/api/products/:product_id", async (req, res) => {
-    try {
-      const doc = db.collection("products").doc(req.params.product_id);
-      const item = await doc.get();
-      const response = item.data();
-
-      return res.status(200).json(response);
-    } catch (error) {
-      return res.status(500).json({
-        error: "Get Failed",
-      });
-    }
-});
-
 app.get("/api/users", async (req, res) => {
   try {
     const query = db.collection("users");
@@ -86,9 +54,9 @@ app.get("/api/users", async (req, res) => {
   }
 });
 
-app.get("/api/products", async (req, res) => {
+app.get("/api/users", async (req, res) => {
   try {
-    const query = db.collection("products");
+    const query = db.collection("users");
     const listOfElements = await query.get();
 
     const docs = listOfElements.docs;
@@ -101,33 +69,6 @@ app.get("/api/products", async (req, res) => {
     return res.status(200).json(response);
   } catch (error) {
     return res.status(500).send(error);
-  }
-});
-
-app.delete("/api/products/:product_id", async (req, res) => {
-  try {
-    const product = db.collection("products").doc(req.params.product_id);
-    await product.delete();
-    return res.status(200).json();
-  } catch (error) {
-    return res.status(500).json({
-      error: "Delete Failed",
-    });
-  }
-});
-
-app.put("/api/products/:product_id", async (req, res) => {
-  try {
-    const product = db.collection("products").doc(req.params.product_id);
-    await product.update({
-      name: req.body.name,
-    });
-
-    return res.status(200).json();
-  } catch (error) {
-    return res.status(500).json({
-      error: "Delete Failed",
-    });
   }
 });
 
